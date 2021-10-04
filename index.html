@@ -55,7 +55,7 @@
                 value: 'lupin'
               },
             ],
-            selected: 'lupin'
+            selected: null
           },
           enterAudio: {
             onara: new Audio('./sounds/「よろしくお願いします」.mp3'),
@@ -89,7 +89,10 @@
         };
       },
       mounted: function () {
+        this.selectSound.selected = 'lupin';
         this.pics.selected = this.pics.lupin;
+        this.enterAudio.selected = this.enterAudio.lupin;
+        this.keyAudios.selected = this.keyAudios.lupin;
       },
       methods: {
         changeSound() {
