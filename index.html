@@ -128,9 +128,7 @@
           } else {
             const idx = Math.floor(Math.random() * key.length);
             key[idx].volume = this.volume.selected;
-            setTimeout(() => {
-              key[idx].play();
-            }, 1);
+            key[idx].play();
           }
         }
       }
