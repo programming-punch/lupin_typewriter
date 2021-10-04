@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html" />
+
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
+  </head>
+
+  <body>
+    <div id="app" class="container">
+      <div class="card">
+        <select class="form-control" v-model="selectSound.selected" @change="changeSound()">
+          <option v-for="option in selectSound.options" v-bind:value="option.value">
+            {{ option.text }}
+          </option>
+        </select>
+        <img v-bind:src="pics.selected" alt="">
+        <textarea class="form-control" rows="5" v-model="message" v-on:keyup="keyUpFunc($event)"></textarea>
+        <select class="form-control" v-model="volume.selected">
+          <option v-for="option in volume.options" v-bind:value="option">{{ option * 100 }}</option>
+        </select>
+      </div>
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
+  <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+  <script>
+    var app = new Vue({
+      el: "#app",
+      data() {
+        return {
+          pics: {
+            onara: './images/onara.png',
+            hydrogen: './images/hydrogen.png',
+            lupin: './images/dorobou_gohan.png',
+            selected: ''
+          },
+          message: '',
+          selectSound: {
+            options: [{
+                text: 'おならの音',
+                value: 'onara'
+              },
+              {
+                text: '水素のおと～',
+                value: 'hydrogen'
+              },
+              {
+                text: 'ル〇ン三世',
+                value: 'lupin'
+              },
+            ],
+            selected: 'lupin'
+          },
+          enterAudio: {
+            onara: new Audio('./sounds/「よろしくお願いします」.mp3'),
+            lupin: new Audio('./sounds/enter.mp3'),
+            hydrogen: new Audio('./sounds/hydrogen_enter.mp3'),
+            selected: null
+          },
+          keyAudios: {
+            onara: [
+              new Audio('sounds/onara_001.mp3'),
+              new Audio('sounds/onara_002.mp3'),
+              new Audio('sounds/onara_038.mp3'),
+              new Audio('sounds/onara_046.mp3'),
+              new Audio('sounds/onara_050.mp3'),
+              new Audio('sounds/onara_051.mp3')
+            ],
+            lupin: [
+              new Audio('sounds/type1.mp3')
+            ],
+            hydrogen: [
+              new Audio('sounds/hydrogen_a.mp3')
+            ],
+            selected: null
+          },
+          volume: {
+            options: [
+              0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1,
+            ],
+            selected: 0.5
+          }
+        };
+      },
+      mounted: function () {
+        this.pics.selected = this.pics.lupin;
+      },
+      methods: {
+        changeSound() {
+          if (this.selectSound.selected == 'onara') {
+            this.enterAudio.selected = this.enterAudio.onara;
+            this.keyAudios.selected = this.keyAudios.onara;
+            this.pics.selected = this.pics.onara;
+          }
+          if (this.selectSound.selected == 'lupin') {
+            this.enterAudio.selected = this.enterAudio.lupin;
+            this.keyAudios.selected = this.keyAudios.lupin;
+            this.pics.selected = this.pics.lupin;
+          }
+          if (this.selectSound.selected == 'hydrogen') {
+            this.enterAudio.selected = this.enterAudio.hydrogen;
+            this.keyAudios.selected = this.keyAudios.hydrogen;
+            this.pics.selected = this.pics.hydrogen;
+          }
+        },
+        keyUpFunc(keyEvent) {
+          this.playSound(keyEvent, this.enterAudio.selected, this.keyAudios.selected);
+        },
+        playSound(keyEvent, enter, key) {
+          enter.pause();
+          enter.currentTime = 0;
+          key.forEach(e => {
+            e.pause();
+            e.currentTime = 0;
+          });
+          if (keyEvent.key === "Enter") {
+            enter.volume = this.volume.selected;
+            enter.play();
+          } else {
+            const idx = Math.floor(Math.random() * key.length);
+            key[idx].volume = this.volume.selected;
+            setTimeout(() => {
+              key[idx].play();
+            }, 1);
+          }
+        }
+      }
+    });
+
+  </script>
+  <style>
+    .card {
+      background: rgba(0, 0, 0, 0);
+    }
+
+    .form-control {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .card-body {
+      background-color: white;
+    }
+
+    .card-header {
+      background-color: white;
+    }
+
+    img {
+      object-fit: cover;
+      height: 10rem;
+      margin: auto;
+    }
+
+    body {
+      background-image: url(./images/space.jpg);
+    }
+
+  </style>
+
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  </head>
+
+  <body>
+    <div id="app">
+      <textarea class="form-control" cols="30" rows="10" v-model="newMessage"
+        v-on:keydown="keyUpFunc($event)"></textarea>
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+    crossorigin="anonymous"></script>
+  <script>
+    var app = new Vue({
+      el: "#app",
+      data() {
+        return {
+          newMessage: "",
+          enterAudio: new Audio('./sounds/「よろしくお願いします」.mp3'),
+          // enterAudio: new Audio('./sounds/enter.mp3'),
+          OnarakeyAudios: [
+            new Audio('sounds/onara_001.mp3'),
+            new Audio('sounds/onara_002.mp3'),
+            new Audio('sounds/onara_038.mp3'),
+            new Audio('sounds/onara_046.mp3'),
+            new Audio('sounds/onara_050.mp3'),
+            new Audio('sounds/onara_051.mp3')
+          ]
+        };
+      },
+      methods: {
+        keyUpFunc(event) {
+          this.enterAudio.pause();
+          this.enterAudio.currentTime = 0;
+          this.keyAudios.forEach(e => {
+            e.pause();
+            e.currentTime = 0;
+          });
+          if (event.key === "Enter") {
+            this.enterAudio.play();
+          } else {
+            const idx = Math.floor(Math.random() * this.keyAudios.length);
+            this.keyAudios[idx].play();
+          }
+        }
+      }
+    });
+  </script>
+
+</html>
